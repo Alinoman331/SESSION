@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ALI-MD SESSION</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -31,7 +36,6 @@
         font-family: 'Share Tech Mono', monospace;
         font-weight: bold;
         background-color: var(--navy-dark);
-        /* Animated Cyber Grid Background */
         background-image: 
           radial-gradient(circle at center, var(--navy-light) 0%, transparent 70%),
           linear-gradient(var(--neon-red-dim) 1px, transparent 1px),
@@ -41,13 +45,12 @@
         animation: cyberGrid 3s linear infinite;
         color: var(--text-main);
         min-height: 100vh;
-        /* Fixed scrolling: Allow vertical scroll, hide horizontal */
         overflow-y: auto; 
         overflow-x: hidden;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 40px 15px; /* Added padding to ensure space for scrolling */
+        padding: 40px 15px; 
       }
 
       @keyframes cyberGrid {
@@ -55,7 +58,7 @@
         100% { background-position: center, 40px 40px, 40px 40px; }
       }
 
-      /* Global Moving Scanline */
+      /* Optimized Scanline using transform for better performance */
       body::after {
         content: "";
         position: fixed;
@@ -65,17 +68,19 @@
         height: 10vh;
         background: linear-gradient(to bottom, transparent, var(--neon-red-dim), transparent);
         opacity: 0.5;
+        /* Using transform instead of 'top' is much faster for the browser */
+        transform: translateY(-10vh);
         animation: scanline 6s linear infinite;
         pointer-events: none;
         z-index: 999;
+        will-change: transform;
       }
 
       @keyframes scanline {
-        0% { top: -10vh; }
-        100% { top: 110vh; }
+        0% { transform: translateY(-10vh); }
+        100% { transform: translateY(110vh); }
       }
 
-      /* Floating Cyber Container */
       .container {
         width: 100%;
         max-width: 450px;
@@ -85,7 +90,6 @@
         padding: 35px;
         position: relative;
         backdrop-filter: blur(10px);
-        /* Full container floating animation */
         animation: floatContainer 4s ease-in-out infinite;
         margin: auto;
       }
@@ -105,9 +109,38 @@
         }
       }
 
+      /* Share Button Styles */
+      .share-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: transparent;
+        border: 1px solid var(--neon-red);
+        color: var(--neon-red);
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: 0.3s;
+        z-index: 10;
+        box-shadow: 0 0 5px var(--neon-red-glow);
+      }
+
+      .share-btn:hover {
+        background: var(--neon-red);
+        color: var(--navy-dark);
+        box-shadow: 0 0 15px var(--neon-red);
+        transform: scale(1.1);
+      }
+
       .header {
         text-align: center;
         margin-bottom: 25px;
+        position: relative;
       }
 
       .logo {
@@ -140,7 +173,6 @@
         100% { transform: rotate(-360deg); }
       }
 
-      /* Neon Text with Flicker */
       .title {
         font-family: 'Orbitron', sans-serif;
         font-size: 26px;
@@ -176,7 +208,6 @@
         50% { opacity: 0.6; text-shadow: none; }
       }
 
-      /* Toggle Switch */
       .toggle-container {
         display: flex;
         border: 2px solid var(--neon-red);
@@ -197,6 +228,8 @@
         color: var(--neon-red);
         transition: 0.3s;
         letter-spacing: 1px;
+        /* Prevents text selection while swiping */
+        user-select: none; 
       }
 
       .toggle-option.active {
@@ -215,7 +248,6 @@
         background: rgba(255, 0, 60, 0.2);
       }
 
-      /* Inputs */
       .input-group {
         margin-bottom: 25px;
       }
@@ -255,7 +287,6 @@
         transform: scale(1.02);
       }
 
-      /* Animated Buttons */
       .generate-btn, .copy-btn {
         width: 100%;
         padding: 15px;
@@ -282,7 +313,6 @@
         transform: translateY(-2px);
       }
 
-      /* Button Hover Scan Effect */
       .generate-btn::before, .copy-btn::before {
         content: '';
         position: absolute;
@@ -307,7 +337,6 @@
         margin-top: 20px;
       }
 
-      /* Display Areas */
       .code-display {
         background: rgba(0, 0, 0, 0.6);
         border: 2px solid var(--neon-red);
@@ -414,18 +443,32 @@
     </style>
   </head>
   <body>
-    <div class="container">
+    <div class="container" id="swipeArea">
+      
+      <button class="share-btn" onclick="shareWebsite()" id="shareBtn" title="Share Website">
+        <i class="fas fa-share-nodes"></i>
+      </button>
+
       <div class="header">
-        <div class="logo"><i class="fas fa-robot"></i></div>
+        <!-- Robot logo ab WhatsApp channel ka link ban gaya hai -->
+        <a href="https://whatsapp.com/channel/0029Vb8C0KE6rsQt5xpfZf1m" target="_blank" class="logo" style="text-decoration: none; cursor: pointer;">
+          <i class="fas fa-robot"></i>
+        </a>
         <h1 class="title">ALI-MD</h1>
         <p class="subtitle">System Authorization</p>
       </div>
 
+      <!-- <div class="header">
+        <div class="logo"><i class="fas fa-robot"></i></div>
+        <h1 class="title">ALI-MD</h1>
+        <p class="subtitle">System Authorization</p>
+      </div> -->
+
       <div class="toggle-container">
-        <div class="toggle-option active" data-mode="pair">
+        <div class="toggle-option active" data-mode="pair" id="pairTab">
           <i class="fas fa-terminal"></i> Pair Code
         </div>
-        <div class="toggle-option" data-mode="qr">
+        <div class="toggle-option" data-mode="qr" id="qrTab">
           <i class="fas fa-qrcode"></i> Scan QR
         </div>
       </div>
@@ -480,16 +523,13 @@
           const mode = this.dataset.mode;
           if (mode === currentMode) return;
 
-          // Update active state
           document
             .querySelectorAll(".toggle-option")
             .forEach((opt) => opt.classList.remove("active"));
           this.classList.add("active");
 
-          // Update mode
           currentMode = mode;
 
-          // Update button and input visibility
           const submitBtn = document.getElementById("submit");
           const inputGroup = document.getElementById("inputGroup");
 
@@ -500,17 +540,66 @@
           } else {
             submitBtn.classList.add("hidden");
             inputGroup.classList.add("hidden");
-            // Auto-generate QR code when QR mode is selected
             generateQRCode();
           }
 
-          // Clear displays
           document.getElementById("codeDisplay").innerHTML = "AWAITING_INPUT...";
           document.getElementById("qrDisplay").style.display = "none";
           document.getElementById("codeDisplay").style.display = "flex";
         });
       });
 
+      // Swipe functionality for mobile devices
+      let touchStartX = 0;
+      let touchEndX = 0;
+      const swipeArea = document.getElementById('swipeArea');
+
+      swipeArea.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, {passive: true});
+
+      swipeArea.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      }, {passive: true});
+
+      function handleSwipe() {
+        const minSwipeDistance = 50;
+        if (touchEndX < touchStartX - minSwipeDistance) {
+          // Swiped Left -> Go to QR mode
+          if (currentMode === "pair") document.getElementById("qrTab").click();
+        }
+        if (touchEndX > touchStartX + minSwipeDistance) {
+          // Swiped Right -> Go to Pair mode
+          if (currentMode === "qr") document.getElementById("pairTab").click();
+        }
+      }
+
+      // Share Website functionality
+      function shareWebsite() {
+        const linkToShare = "https://ali-md-session-2c6bb8b9771f.herokuapp.com/";
+        const shareBtn = document.getElementById("shareBtn");
+        
+        navigator.clipboard.writeText(linkToShare).then(() => {
+          shareBtn.innerHTML = '<i class="fas fa-check"></i>';
+          shareBtn.style.background = "var(--success-color)";
+          shareBtn.style.color = "var(--navy-dark)";
+          shareBtn.style.borderColor = "var(--success-color)";
+          shareBtn.style.boxShadow = "0 0 15px var(--success-color)";
+          
+          setTimeout(() => {
+            shareBtn.innerHTML = '<i class="fas fa-share-nodes"></i>';
+            shareBtn.style.background = "transparent";
+            shareBtn.style.color = "var(--neon-red)";
+            shareBtn.style.borderColor = "var(--neon-red)";
+            shareBtn.style.boxShadow = "0 0 5px var(--neon-red-glow)";
+          }, 2000);
+        }).catch(err => {
+          console.error('Failed to copy link: ', err);
+        });
+      }
+
+      // QR Code Generation
       async function generateQRCode() {
         const codeDisplay = document.getElementById("codeDisplay");
         const qrDisplay = document.getElementById("qrDisplay");
@@ -522,7 +611,6 @@
 
         try {
           const response = await axios("/qr");
-
           if (response.data.qr) {
             document.getElementById("qrImage").src = response.data.qr;
             document.getElementById("qrInstructions").innerHTML =
@@ -544,6 +632,7 @@
         }
       }
 
+      // Pair Code Execution
       document.getElementById("submit").addEventListener("click", async (e) => {
         e.preventDefault();
 
@@ -586,6 +675,7 @@
         }
       });
 
+      // Copy Code Function
       function copyCode() {
         const codeDisplay = document.getElementById("codeDisplay").innerText;
         const code = codeDisplay.replace("CODE: ", "");
